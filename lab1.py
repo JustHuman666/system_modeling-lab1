@@ -46,7 +46,7 @@ def exponential_distribution(lyambda: float) -> tuple[list, list]:
     for index in range(10000):
         rand_value = random.random()
         x_value = -np.log(rand_value) / lyambda
-        y_value = 1 - math.pow(math.e, -x_value * lyambda)
+        y_value = np.exp(-lyambda*x_value)
         x_list.append(x_value)
         y_list.append(y_value)
     return x_list, y_list
@@ -66,7 +66,7 @@ def normal_distribution(alpha: float, sygma: float) -> tuple[list, list]:
     return x_list, y_list
 
 
-def uniform_distribution(a=math.pow(5, 13), c=math.pow(2, 31)) -> list:
+def uniform_distribution(a: float, c: float) -> list:
     x_list = []
     z = a * random.random() % c
     for index in range(10000):
@@ -177,8 +177,8 @@ def normal_observing(distribution: str, intervals_amount: int, alpha: float, syg
     draw_function_graph(x_list, y_list, distribution)
 
 
-def uniform_observing(distribution: str, intervals_amount: int):
-    x_list = uniform_distribution()
+def uniform_observing(distribution: str, intervals_amount: int, a: float, c: float):
+    x_list = uniform_distribution(a, c)
     intervals_dict: dict = expand_by_intervals(x_list, intervals_amount)
     expected_values_list = []
     for interval in intervals_dict.keys():
@@ -192,4 +192,4 @@ def uniform_observing(distribution: str, intervals_amount: int):
 if __name__ == "__main__":
     exponential_observing("exponential", 20, 0.5)
     normal_observing("normal", 20, 0.5, 2)
-    uniform_observing("uniform", 10)
+    uniform_observing("uniform", 20, math.pow(5, 13), math.pow(2, 31))
